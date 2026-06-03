@@ -1,0 +1,261 @@
+<!-- HTML + Bootstrap done manually, CSS done entirely via ClaudeAI
+*Note some HTML had to be tweaked in order to implement css styling-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AutoApproval</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #080808;
+            --card: #141414;
+            --border: #1e1e1e;
+            --accent: #e63946;
+            --text: #f0f0f0;
+            --muted: #777;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .container-sm {
+            max-width: 800px;
+        }
+
+        header {
+            margin-top: 60px;
+        }
+
+        h1 {
+            color: var(--text);
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.05;
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        p {
+            color: rgba(240,240,240,0.5);
+            font-size: 15px;
+            font-weight: 300;
+        }
+
+        hr {
+            border: 1px solid var(--border);
+            opacity: 1;
+        }
+
+        p i {
+            color: var(--accent);
+            font-style: normal;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: 'Space Mono', monospace;
+        }
+
+        label {
+            color: var(--text);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        input[type="number"] {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 6px;
+            padding: 12px 14px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            outline: none;
+            width: 100%;
+            max-width: 300px;
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button { display: none; }
+
+        input[type="number"]::placeholder {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        input[type="radio"] { display: none; }
+
+        input[type="radio"] + label {
+            display: inline-block;
+            padding: 8px 14px;
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 4px;
+            color: rgba(240,240,240,0.6);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: none;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        input[type="radio"]:checked + label {
+            background: rgba(230,57,70,0.12);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        button[type="submit"] {
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 16px 40px;
+            cursor: pointer;
+        }
+
+        #finance_term label {
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-transform: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-sm">
+    <header>
+        <h1 class="text-center">Find Your <span>Next Car</span></h1>
+    </header>
+
+    <p class="text-center">Enter your financial details below, and we will show you exactly which cars you qualify for</p>
+
+    <hr>
+    <br>
+
+    <form action="/results" method="POST">
+        <p><i>Financial Information</i></p>
+
+        <div>
+            <label for="budget">Budget</label>
+            <br>
+            <input type="number" id="budget" name="budget" placeholder="e.g. 15,000" required min="5000">
+        </div>
+
+        <br>
+
+        <div>
+            <label for="credit_score">Credit Score</label>
+            <br>
+            <input type="number" id="credit_score" name="credit_score" placeholder="e.g. 750" required min="0" max="850">
+        </div>
+
+        <br>
+
+        <div id="down_payment_field">
+            <label for="down_payment">Down Payment</label>
+            <br>
+            <input type="number" id="down_payment" name="down_payment" placeholder="e.g. 5,000" min="0">
+        </div>
+
+        <br>
+
+        <div>
+            <label for="monthly_income">Monthly Income</label>
+            <br>
+            <input type="number" id="monthly_income" name="monthly_income" placeholder="e.g. 3,000" required min="0">
+        </div>
+
+        <br><br>
+
+        <p><i>Employment Status</i></p>
+
+        <label>Select the option that best represents your current employment status</label>
+        <br><br>
+
+        <input type="radio" id="1" name="employment_status" value="1" required>
+        <label for="1">Full Time <span style="font-size: 10px; opacity: 0.6;">(includes Self Employed)</span></label>
+        <br>
+
+        <input type="radio" id="2" name="employment_status" value="2">
+        <label for="2">Part Time</label>
+        <br>
+
+        <input type="radio" id="3" name="employment_status" value="3">
+        <label for="3">Student</label>
+        <br>
+
+        <input type="radio" id="4" name="employment_status" value="4">
+        <label for="4">Unemployed</label>
+
+        <br><br><br>
+
+        <p><i>Payment Method</i></p>
+
+        <label>How would you like to pay?</label>
+        <br><br>
+
+        <input type="radio" id="finance" name="payment_method" value="finance" onclick="showFinanceOptions()" required>
+        <label for="finance">Finance</label>
+
+        <input type="radio" id="pay_in_full" name="payment_method" value="pay_in_full" onclick="hideFinanceOptions()" required>
+        <label for="pay_in_full">Pay in Full</label>
+
+        <div id="finance_term" style="display: none;">
+            <br>
+            <input type="radio" id="12" name="finance_term" value="12">
+            <label for="12">12 mo</label>
+            <input type="radio" id="24" name="finance_term" value="24">
+            <label for="24">24 mo</label>
+            <input type="radio" id="36" name="finance_term" value="36">
+            <label for="36">36 mo</label>
+            <input type="radio" id="48" name="finance_term" value="48">
+            <label for="48">48 mo</label>
+            <input type="radio" id="60" name="finance_term" value="60">
+            <label for="60">60 mo</label>
+            <input type="radio" id="72" name="finance_term" value="72">
+            <label for="72">72 mo</label>
+        </div>
+
+        <div>
+            <br><br>
+            <button type="submit">Check My Approval →</button>
+        </div>
+
+    </form>
+    <br><br>
+</div>
+
+<script>
+    function showFinanceOptions() {
+        document.getElementById("finance_term").style.display = "block";
+        document.getElementById("down_payment_field").style.display = "block";
+        document.getElementById("down_payment").required = true;
+    }
+
+    function hideFinanceOptions() {
+        document.getElementById("finance_term").style.display = "none";
+        document.getElementById("down_payment_field").style.display = "none";
+        document.getElementById("down_payment").required = false;
+    }
+</script>
+
+</body>
+</html>
