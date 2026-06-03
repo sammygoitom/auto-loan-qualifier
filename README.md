@@ -15,4 +15,4 @@ Tech Stack:
 Features:
 - Weighted Customer Scoring algorithm
 - 6 class OOP scoring architecture
-- Deployed/Live on AWS
+- Deployed on AWS
