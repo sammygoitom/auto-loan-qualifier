@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from credit_score import CreditScore
 from cars import cars
 from down_payment import DownPayment
@@ -17,33 +17,43 @@ def form():
 
 @app.route("/results", methods=["POST"])
 def results():
-    if request.method == "POST":
-        budget = int(request.form['budget'])
-        credit_score = int(request.form['credit_score'])
-        down_payment = int(request.form.get('down_payment') or 0)  # Was throwing an error so switched from , 0 to or 0
-        monthly_income = int(request.form['monthly_income'])
-        employment_status = int(request.form['employment_status'])
-        payment_method = request.form['payment_method']
-        finance_term = int(request.form['finance_term']) if payment_method == 'finance' else 0
+    if ("budget" not in request.form
+            or "credit_score" not in request.form
+            or "monthly_income" not in request.form
+            or "employment_status" not in request.form
+            or "payment_method" not in request.form):
+        return redirect(url_for("form"))
 
-        # Run Scoring logic
-        credit_rating = CreditScore(credit_score).credit_rating()
-        down_payment_score = DownPayment(down_payment, budget).down_payment_score()
-        employment = Employment(employment_status, monthly_income)
-        employment_score = employment.employment_status_score()
-        income_score = employment.monthly_income_score()
-        finance_score = FinanceTerm(finance_term).finance_term_score()
+    budget = int(request.form['budget'])
+    credit_score = int(request.form['credit_score'])
+    down_payment = int(request.form.get('down_payment') or 0)  # Was throwing an error so switched from , 0 to or 0
+    monthly_income = int(request.form['monthly_income'])
+    employment_status = int(request.form['employment_status'])
+    payment_method = request.form['payment_method']
+    finance_term = int(request.form['finance_term']) if payment_method == 'finance' else 0
 
-        final_score = CustomerScore(down_payment_score, credit_rating, employment_score,
-                                    income_score, finance_score).final_customer_score()
+    # Run Scoring logic
+    credit_rating = CreditScore(credit_score).credit_rating()
+    down_payment_score = DownPayment(down_payment, budget).down_payment_score()
+    employment = Employment(employment_status, monthly_income)
+    employment_score = employment.employment_status_score()
+    income_score = employment.monthly_income_score()
+    finance_score = FinanceTerm(finance_term).finance_term_score()
 
-        approval = CarApproval(final_score, budget, down_payment, payment_method)
-        approved, manual = approval.get_approval_limit(cars)
+    final_score = CustomerScore(down_payment_score, credit_rating, employment_score,
+                                income_score, finance_score).final_customer_score()
 
-        return render_template("results.html", final_score=final_score, manual=manual, approved=approved)
+    approval = CarApproval(final_score, budget, down_payment, payment_method)
+    approved, manual = approval.get_approval_limit(cars)
+
+    return render_template("results.html", final_score=final_score, manual=manual, approved=approved)
+
+#For AWS EB Health checks
+@app.route("/health")
+def health():
+    return "ok", 200
 
 
 if __name__ == "__main__":
     app.run(debug=False)
 application = app
-
