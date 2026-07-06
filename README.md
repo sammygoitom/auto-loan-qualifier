@@ -1,18 +1,25 @@
-# auto-loan-qualifier
-Car approval web app: Ingests user's financial data, processes it through a weighted scoring algorithm, displays vehicles approved, and those requiring manual approval
+# Auto Loan Qualifier
 
-Presentation: https://docs.google.com/presentation/d/1NcaUOtVPDeoQt9SD4xyeZKA4chRJq_n2v68p1_aDFlU/edit?usp=drive_link
+Full-stack Flask web app that evaluates auto-loan eligibility from a user’s financial profile and returns vehicles grouped by approval status.
 
+## Project Info
 
-Tech Stack:
-  - Python/Flask
-  - AWS Elastic Beanstalk
-  - Bootstrap, HTML, CSS
-  - SerpAPI (Dynamic image calling)
-  - Pandas (Object creation from xlsx)
+[Project Presentation](https://docs.google.com/presentation/d/1NcaUOtVPDeoQt9SD4xyeZKA4chRJq_n2v68p1_aDFlU/edit?usp=drive_link)
 
+## Features
 
-Features:
-- Weighted Customer Scoring algorithm
-- 6 class OOP scoring architecture
-- Deployed on AWS
+- Scores applicants based on credit score, income, down payment, employment status, and finance term
+- Uses a modular weighted scoring engine built with separate Python classes for each financial factor
+- Groups vehicles into approved and manual-review categories based on applicant score and budget
+- Loads vehicle inventory from an S3-hosted Excel file using Pandas and Boto3
+- Displays vehicle results with make, year, price, mileage, and image URLs
+- Includes batch image URL population using SerpAPI
+- Containerized with Docker and served with Gunicorn
+- Deployed to AWS Elastic Beanstalk with IAM instance role access to S3
+
+## Tech Stack
+
+**Backend:** Python, Flask, Pandas  
+**Frontend:** HTML, CSS, Bootstrap, Jinja2  
+**Cloud / Deployment:** AWS Elastic Beanstalk, IAM, S3, Docker, Gunicorn  
+**APIs / Scripts:** SerpAPI
