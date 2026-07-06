@@ -1,5 +1,4 @@
-<!-- HTML + Bootstrap done manually, CSS done entirely via ClaudeAI
-*Note some HTML had to be tweaked in order to implement css styling-->
+<!-- HTML + Bootstrap done manually, Claude assisted CSS + scripts + responsive design-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -136,6 +135,24 @@
             letter-spacing: 0.5px;
             text-transform: none;
         }
+
+        @media (max-width: 576px) {
+            .container-sm {
+                padding: 0 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            input[type="number"] {
+                max-width: 100%;
+            }
+
+            #finance_term label {
+                margin-bottom: 6px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -154,9 +171,9 @@
         <p><i>Financial Information</i></p>
 
         <div>
-            <label for="budget">Budget</label>
+            <label for="budget">Budget - ($5,000 Minimum)</label>
             <br>
-            <input type="number" id="budget" name="budget" placeholder="e.g. 15,000" required min="5000">
+            <input type="number" id="budget" name="budget" placeholder="e.g. 15000" min="5000" required>
         </div>
 
         <br>
@@ -164,7 +181,7 @@
         <div>
             <label for="credit_score">Credit Score</label>
             <br>
-            <input type="number" id="credit_score" name="credit_score" placeholder="e.g. 750" required min="0" max="850">
+            <input type="number" id="credit_score" name="credit_score" placeholder="e.g. 750" min="0" max="850" required>
         </div>
 
         <br>
@@ -172,7 +189,7 @@
         <div id="down_payment_field">
             <label for="down_payment">Down Payment</label>
             <br>
-            <input type="number" id="down_payment" name="down_payment" placeholder="e.g. 5,000" min="0">
+            <input type="number" id="down_payment" name="down_payment" placeholder="e.g. 5000" min="0">
         </div>
 
         <br>
@@ -180,7 +197,7 @@
         <div>
             <label for="monthly_income">Monthly Income</label>
             <br>
-            <input type="number" id="monthly_income" name="monthly_income" placeholder="e.g. 3,000" required min="0">
+            <input type="number" id="monthly_income" name="monthly_income" placeholder="e.g. 3000" required min="0">
         </div>
 
         <br><br>
@@ -247,15 +264,26 @@
     function showFinanceOptions() {
         document.getElementById("finance_term").style.display = "block";
         document.getElementById("down_payment_field").style.display = "block";
-        document.getElementById("down_payment").required = true;
+
+        document.getElementById("down_payment").required = false;
+
+        const financeTerms = document.querySelectorAll('input[name="finance_term"]');
+        financeTerms.forEach(term => term.required = true);
     }
 
     function hideFinanceOptions() {
         document.getElementById("finance_term").style.display = "none";
         document.getElementById("down_payment_field").style.display = "none";
         document.getElementById("down_payment").required = false;
+
+        const financeTerms = document.querySelectorAll('input[name="finance_term"]');
+        financeTerms.forEach(term => {
+            term.required = false;
+            term.checked = false;
+        });
     }
 </script>
+
 
 </body>
 </html>
