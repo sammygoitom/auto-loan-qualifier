@@ -3,8 +3,10 @@ class FinanceTerm:
         self.finance_term = finance_term
 
     def finance_term_score(self):
-        if self.finance_term == 0 or self.finance_term == 12:
+        if self.finance_term == 0:
             return 1.0
+        elif self.finance_term == 12:
+            return 0.9
         elif self.finance_term == 24:
             return 0.8
         elif self.finance_term == 36:
