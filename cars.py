@@ -1,3 +1,5 @@
+from io import BytesIO
+import boto3
 import pandas as pd
 
 
@@ -11,12 +13,35 @@ class Car:
         self.image_url = image_url
 
 
-df = pd.read_excel("cars.xlsx")
+def load_cars_from_s3():
 
-# Pandas loops through every row given the template for what properties each car
-# has, then adds each car object to a list
-cars = []
+    s3 = boto3.client("s3")
 
-for _, row in df.iterrows():
-    car = Car(make=row["make"], year=row["year"], price=row["price"], mileage=row["mileage"], image_url=row["image_url"])
-    cars.append(car)
+    response = s3.get_object(
+        Bucket = "vehicles7614",
+        Key = "cars.xlsx",
+    )
+
+    excel_file = BytesIO(response["Body"].read())
+    df = pd.read_excel(excel_file)
+
+    cars = []
+
+    for _, row in df.iterrows():
+        car = Car(
+            make=row["make"],
+            year=row["year"],
+            price=row["price"],
+            mileage=row["mileage"],
+            image_url=row["image_url"]
+        )
+        cars.append(car)
+
+    return cars
+
+#Bypass import error for eb
+try:
+    cars = load_cars_from_s3()
+except Exception as e:
+    print(f"ERROR loading cars from S3: {e}", flush=True)
+    cars = []
